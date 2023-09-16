@@ -6,12 +6,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.CompoundButton;
 
@@ -88,12 +91,11 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         b.brightnessSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if ((promoCode || myPromo) && isChecked) {
+            if (isChecked) {
                 b.brightnessSlider.setVisibility(View.VISIBLE);
-            } else if ((promoCode || myPromo) && !isChecked) {
-                b.brightnessSlider.setVisibility(View.GONE);
             } else {
-                brightnessAlert();
+                b.brightnessSlider.setVisibility(View.GONE);
+                flashOffPromoCode();
             }
 
 
@@ -138,12 +140,20 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        b.promocodesCard.setOnClickListener(v -> {
+        b.rafConsoleCard.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), RafConsoleActivity.class));
         });
 
         b.backMainCard.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+            if (b.brightnessSwitch.isChecked()) {
+                intent1.putExtra("brightnessSlider",
+                        SharedPreferencesUtils.getInteger(
+                                getApplicationContext(), "brightnessSlider", 1));
+            } else {
+                intent1.putExtra("brightnessSlider", 1);
+            }
+            startActivity(intent1);
         });
     }
 
@@ -179,5 +189,29 @@ public class SettingsActivity extends AppCompatActivity {
                 .show();
 
         b.brightnessSwitch.setChecked(false);
+    }
+
+    public void flashOffPromoCode() {
+        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
+        try {
+            String cameraId = cameraManager.getCameraIdList()[0];
+            cameraManager.setTorchMode(cameraId, false);
+        }
+        catch (CameraAccessException e) {
+
+        }
+    }
+
+    public void flashOnPromoCode() {
+        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
+        try {
+            String cameraId = cameraManager.getCameraIdList()[0];
+            System.out.println(cameraManager.getCameraIdList().length);
+            cameraManager.setTorchMode(cameraId, true);
+        }
+        catch (CameraAccessException e)
+        {}
     }
 }

@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     tools:context=".MainActivity">
 
     <com.google.android.material.button.MaterialButton
@@ -30,7 +29,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="OFF"
-        android:textColor="@color/black"
         android:textSize="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

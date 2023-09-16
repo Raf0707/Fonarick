@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     int accessSettingsCounter = 0;
     private boolean promoCode = false;
 
+    private int brightLight;
     private boolean myPromo = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,22 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
+        brightLight = SharedPreferencesUtils.getInteger(getApplicationContext(), "brightnessSlider");
 
-
-        if (state) {
-            flashOnPromoCode();
-        } else {
-            flashOffPromoCode();
-        }
-
-        Intent intent = getIntent();
-        promoCode = intent.getBooleanExtra("promoCode", false);
-
-        myPromo = promoCode;
-
-        SharedPreferencesUtils.saveBoolean(getApplicationContext(), "promo", myPromo);
-
-        promoCode = SharedPreferencesUtils.getBoolean(getApplicationContext(), "promo", false);
+        if (savedInstanceState != null) App.instance.setNightMode();
 
         Dexter.withContext(this)
                 .withPermission(Manifest.permission.CAMERA)
@@ -103,13 +91,11 @@ public class MainActivity extends AppCompatActivity {
         binding.torchbtn.setOnClickListener(v -> {
             if (!state)
             {
-                if (promoCode || myPromo) flashOnPromoCode();
-                else flashLightOnAlert();
+                flashOnPromoCode();
             }
             else
             {
-                if (promoCode || myPromo) flashOffPromoCode();
-                else flashLightOffAlert();
+                flashOffPromoCode();
             }
         });
     }
@@ -217,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             String cameraId = cameraManager.getCameraIdList()[0];
+            System.out.println(cameraManager.getCameraIdList().length);
             cameraManager.setTorchMode(cameraId, true);
             state = true;
             SharedPreferencesUtils.saveBoolean(getApplicationContext(), "stateFlash", state);

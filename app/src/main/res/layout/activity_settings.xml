@@ -131,7 +131,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/promocodesCard"
+        android:id="@+id/rafConsoleCard"
         style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
             android:gravity="center"
             android:layout_gravity="center|center_vertical"
             android:padding="10dp"
-            android:text="Промокоды"
+            android:text="Raf Console Studio"
             android:textSize="31sp"
             android:textStyle="bold" />
 
