@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        app:cardCornerRadius="16dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="32dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:text="Внешний вид"
+                android:textSize="31sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Настройки темы"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/appThemeRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/setFollowSystemTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Follow system"
+                    android:textSize="18sp" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/setLightTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Light mode"
+                    android:textSize="18sp" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/setNightTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Night mode"
+                    android:textSize="18sp" />
+
+            </RadioGroup>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/dynamicColorsSwitch"
+                style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="true"
+                android:paddingHorizontal="8dp"
+                android:text="Use Dynamic colors"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/brightnessCard"
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        app:cardCornerRadius="16dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="32dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center|center_vertical"
+            android:padding="10dp"
+            android:text="Управление яркостью фонарика"
+            android:textSize="31sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/brightnessSwitch"
+            style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:paddingHorizontal="8dp"
+            android:text="Яркость фонарика"
+            android:textSize="18sp" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/brightnessSlider"
+                android:valueFrom="1"
+                android:valueTo="5"
+                app:tickVisible="true"
+                tickCount="5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/promocodesCard"
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        app:cardCornerRadius="16dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="32dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center|center_vertical"
+            android:padding="10dp"
+            android:text="Промокоды"
+            android:textSize="31sp"
+            android:textStyle="bold" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/backMainCard"
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        app:cardCornerRadius="16dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="32dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center|center_vertical"
+            android:padding="10dp"
+            android:text="Назад"
+            android:textSize="31sp"
+            android:textStyle="bold" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</LinearLayout>
