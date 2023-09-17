@@ -27,6 +27,8 @@ public class RafConsoleActivity extends AppCompatActivity {
         b.tgStudio.setOnClickListener(v -> new CustomTabUtil().openCustomTab(this,
                 "https://t.me/+OoI8UWDVVm0yMDNi", R.color.black));
 
-
+        b.backToMainActivity.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        });
     }
 }

@@ -8,6 +8,8 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -34,6 +36,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".FlashLightForegroundService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":MegaLockerProcess"/>
+
     </application>
 
 </manifest>

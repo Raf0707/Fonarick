@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.view.View;
 import android.view.Window;
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     int counterOn = 0;
     int accessSettingsCounter = 0;
     private boolean promoCode = false;
+
 
     private int brightLight;
     private boolean myPromo = false;
@@ -177,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
             state = false;
             SharedPreferencesUtils.saveBoolean(getApplicationContext(), "stateFlash", state);
             binding.torchbtn.setText("OFF");
+
         }
         catch (CameraAccessException e) {
             Snackbar.make(binding.getRoot(),
@@ -196,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).show();
         }
+
     }
 
     public void flashOnPromoCode() {
@@ -208,8 +214,36 @@ public class MainActivity extends AppCompatActivity {
             state = true;
             SharedPreferencesUtils.saveBoolean(getApplicationContext(), "stateFlash", state);
             binding.torchbtn.setText("On");
+
         }
         catch (CameraAccessException e)
         {}
+
+    }
+
+    public void flash_effect(View view) {
+        Camera camera;
+        Camera.Parameters params;
+        long delay = 50;
+        camera = Camera.open();
+        params = camera.getParameters();
+        params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+
+        camera.setParameters(params);
+        camera.startPreview();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                camera.setParameters(params);
+                camera.stopPreview();
+                camera.release();
+
+            }
+        }, delay);
+
     }
 }

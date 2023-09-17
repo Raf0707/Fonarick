@@ -8,12 +8,15 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -24,6 +27,7 @@ import com.google.android.material.slider.Slider;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import raf.tabiin.flashlight.databinding.ActivitySettingsBinding;
@@ -36,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
     private boolean promoCode = false;
     private boolean myPromo = false;
     private String cameraId;
+    private Vibrator vibrator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,12 +54,14 @@ public class SettingsActivity extends AppCompatActivity {
         myPromo = promoCode;
         SharedPreferencesUtils.saveBoolean(getApplicationContext(), "promo", myPromo);
 
-        switchMaterial = (SwitchMaterial) b.dynamicColorsSwitch;
+        switchMaterial = b.dynamicColorsSwitch;
+        vibrator = (Vibrator) getSystemService(getApplicationContext().VIBRATOR_SERVICE);
         b.appThemeRadioGroup.check(SharedPreferencesUtils.getInteger(getApplicationContext(), "checkedButton", R.id.setFollowSystemTheme));
         b.dynamicColorsSwitch.setEnabled(DynamicColors.isDynamicColorAvailable());
         switchMaterial.setChecked(SharedPreferencesUtils.getBoolean(getApplicationContext(), "useDynamicColors"));
         b.brightnessSwitch.setChecked(SharedPreferencesUtils.getBoolean(getApplicationContext(), "brightnessSwitch"));
         b.brightnessSlider.setValue(SharedPreferencesUtils.getInteger(getApplicationContext(), "brightnessSlider", 1));
+
         b.appThemeRadioGroup.check(SharedPreferencesUtils.getInteger(getApplicationContext(), "checkedButton", R.id.setFollowSystemTheme));
         promoCode = SharedPreferencesUtils.getBoolean(getApplicationContext(), "promo", false);
 
@@ -98,8 +105,6 @@ public class SettingsActivity extends AppCompatActivity {
                 flashOffPromoCode();
             }
 
-
-
             SharedPreferencesUtils.saveBoolean(getApplicationContext(), "brightnessSwitch", isChecked);
         });
 
@@ -111,6 +116,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(@NonNull Slider slider) {
+
                 CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
@@ -126,6 +132,8 @@ public class SettingsActivity extends AppCompatActivity {
                         }
                     } catch (CameraAccessException e) {
                         e.printStackTrace();
+                    } catch (IllegalStateException e) {
+                        slider.setValue(1);
                     }
 
                     try {
@@ -134,6 +142,8 @@ public class SettingsActivity extends AppCompatActivity {
                         cameraManager.setTorchMode(cameraId, false);
                     } catch (CameraAccessException e) {
                         throw new RuntimeException(e);
+                    } catch (IllegalStateException e) {
+                        slider.setValue(1);
                     }
                 }
                 SharedPreferencesUtils.saveInteger(getApplicationContext(), "brightnessSlider", (int) slider.getValue());
@@ -150,9 +160,10 @@ public class SettingsActivity extends AppCompatActivity {
                 intent1.putExtra("brightnessSlider",
                         SharedPreferencesUtils.getInteger(
                                 getApplicationContext(), "brightnessSlider", 1));
-            } else {
+            } else if (!b.brightnessSwitch.isChecked()) {
                 intent1.putExtra("brightnessSlider", 1);
             }
+
             startActivity(intent1);
         });
     }
@@ -213,5 +224,31 @@ public class SettingsActivity extends AppCompatActivity {
         }
         catch (CameraAccessException e)
         {}
+    }
+
+    public void flash_effect(View view) {
+        Camera camera;
+        Camera.Parameters params;
+        long delay = 50;
+        camera = Camera.open();
+        params = camera.getParameters();
+        params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+
+        camera.setParameters(params);
+        camera.startPreview();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                camera.setParameters(params);
+                camera.stopPreview();
+                camera.release();
+
+            }
+        }, delay);
+
     }
 }

@@ -44,14 +44,14 @@
                 android:gravity="center"
                 android:paddingBottom="10dp"
                 android:text="Внешний вид"
-                android:textSize="31sp"
+                android:textSize="70sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Настройки темы"
-                android:textSize="21sp"
+                android:textSize="50sp"
                 android:textStyle="bold" />
 
             <RadioGroup
@@ -64,21 +64,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Follow system"
-                    android:textSize="18sp" />
+                    android:textSize="28sp" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/setLightTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Light mode"
-                    android:textSize="18sp" />
+                    android:textSize="28sp" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/setNightTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Night mode"
-                    android:textSize="18sp" />
+                    android:textSize="28sp" />
 
             </RadioGroup>
 
@@ -90,7 +90,7 @@
                 android:enabled="true"
                 android:paddingHorizontal="8dp"
                 android:text="Use Dynamic colors"
-                android:textSize="18sp" />
+                android:textSize="28sp" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -118,7 +118,7 @@
             android:layout_gravity="center|center_vertical"
             android:padding="10dp"
             android:text="Управление яркостью фонарика"
-            android:textSize="31sp"
+            android:textSize="50sp"
             android:textStyle="bold" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
@@ -129,7 +129,7 @@
             android:enabled="true"
             android:paddingHorizontal="8dp"
             android:text="Яркость фонарика"
-            android:textSize="18sp" />
+            android:textSize="28sp" />
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/brightnessSlider"
@@ -149,7 +149,7 @@
                 android:layout_gravity="center|center_vertical"
                 android:padding="10dp"
                 android:text="Вспышка камеры может вызвать низкотемпературные ожоги при длительном контакте с кожей. Не оставляйте Фонарик включенным в течении длительного времени"
-                android:textSize="16sp"
+                android:textSize="26sp"
                 android:textStyle="bold" />
 
 
