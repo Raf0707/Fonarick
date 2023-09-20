@@ -1,6 +1,7 @@
 package raf.tabiin.flashlight;
 import static androidx.core.content.ContentProviderCompat.requireContext;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -8,8 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -19,6 +22,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.slider.Slider;
 import com.google.android.material.snackbar.Snackbar;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -39,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     int accessSettingsCounter = 0;
     private boolean promoCode = false;
 
-
+    private String cameraId;
     private int brightLight;
     private boolean myPromo = false;
     @Override
@@ -50,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         getSupportActionBar().hide();
+
+        App.instance.setNightMode();
 
         brightLight = SharedPreferencesUtils.getInteger(getApplicationContext(), "brightnessSlider");
 
@@ -79,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
                     
         }).check();
 
+        binding.brightnessSlider.setVisibility(View.GONE);
+
         binding.torchbtn.setOnLongClickListener(v -> {new CustomTabUtil().openCustomTab(this,
                 "https://t.me/+OoI8UWDVVm0yMDNi", R.color.black);
             return true;
@@ -86,6 +94,78 @@ public class MainActivity extends AppCompatActivity {
 
         binding.openSettingsBtn.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+        });
+
+        binding.brightnessSlider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+            @Override
+            public void onStartTrackingTouch(@NonNull Slider slider) {
+
+                CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+                    try {
+                        String[] cameraIds = cameraManager.getCameraIdList();
+                        for (String id : cameraIds) {
+                            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
+                            Integer lensFacing = characteristics.get(CameraCharacteristics.LENS_FACING);
+                            if (lensFacing != null && lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
+                                cameraId = id;
+                                break;
+                            }
+                        }
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    } catch (IllegalStateException e) {
+                        slider.setValue(1);
+                    }
+
+                    try {
+                        cameraManager.setTorchMode(cameraId, true);
+                        cameraManager.turnOnTorchWithStrengthLevel(cameraId, (int) slider.getValue());
+                        cameraManager.setTorchMode(cameraId, false);
+
+                    } catch (CameraAccessException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalStateException e) {
+                        slider.setValue(1);
+                    }
+                }
+                SharedPreferencesUtils.saveInteger(getApplicationContext(), "brightnessSlider", (int) slider.getValue());
+            }
+
+            @Override
+            public void onStopTrackingTouch(@NonNull Slider slider) {
+                CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+                    try {
+                        String[] cameraIds = cameraManager.getCameraIdList();
+                        for (String id : cameraIds) {
+                            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
+                            Integer lensFacing = characteristics.get(CameraCharacteristics.LENS_FACING);
+                            if (lensFacing != null && lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
+                                cameraId = id;
+                                break;
+                            }
+                        }
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    } catch (IllegalStateException e) {
+                        slider.setValue(1);
+                    }
+
+                    try {
+                        cameraManager.setTorchMode(cameraId, true);
+                        cameraManager.turnOnTorchWithStrengthLevel(cameraId, (int) slider.getValue());
+                        cameraManager.setTorchMode(cameraId, false);
+                    } catch (CameraAccessException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalStateException e) {
+                        slider.setValue(1);
+                    }
+                }
+                SharedPreferencesUtils.saveInteger(getApplicationContext(), "brightnessSlider", (int) slider.getValue());
+            }
         });
 
     }
@@ -96,10 +176,12 @@ public class MainActivity extends AppCompatActivity {
             if (!state)
             {
                 flashOnPromoCode();
+                binding.brightnessSlider.setVisibility(View.VISIBLE);
             }
             else
             {
                 flashOffPromoCode();
+                binding.brightnessSlider.setVisibility(View.GONE);
             }
         });
     }

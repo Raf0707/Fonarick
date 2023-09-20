@@ -10,12 +10,12 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/openSettingsBtn"
         style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         app:cornerRadius="28dp"
         app:icon="@drawable/baseline_settings_24"
         app:iconGravity="textEnd"
-        app:iconSize="100dp"
+        app:iconSize="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.955"
@@ -25,16 +25,65 @@
 
     <TextView
         android:id="@+id/torchbtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="800dp"
+        android:layout_height="800dp"
         android:gravity="center"
         android:text="OFF"
-        android:textSize="400dp"
+        android:textSize="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.238">
+
     </TextView>
+
+    <ProgressBar
+        android:id="@+id/counterBetaProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="800dp"
+        android:layout_height="800dp"
+        android:indeterminateOnly="false"
+        android:max="1"
+        android:progress="1"
+        android:progressDrawable="@drawable/circular_progress"
+        android:rotation="-90"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.238" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/brightnessSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stepSize="1"
+        android:valueFrom="1"
+        android:valueTo="5"
+        app:labelBehavior="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.673"
+        app:tickVisible="true" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/brightnessWarning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center_vertical"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Вспышка камеры может вызвать низкотемпературные ожоги при длительном контакте с кожей. Не оставляйте Фонарик включенным в течении длительного времени"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.823"
+        tools:layout_editor_absoluteX="32dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

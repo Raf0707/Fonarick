@@ -24,7 +24,7 @@ public class App extends Application {
     }
 
     public void setNightMode() {
-        int nightMode = SharedPreferencesUtils.getInteger(this, "nightMode", 1);
+        int nightMode = SharedPreferencesUtils.getInteger(this, "nightMode", 0);
         int[] mode = {//AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY,
                 AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
                 AppCompatDelegate.MODE_NIGHT_NO,

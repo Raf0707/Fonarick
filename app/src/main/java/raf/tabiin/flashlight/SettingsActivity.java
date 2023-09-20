@@ -59,14 +59,14 @@ public class SettingsActivity extends AppCompatActivity {
         b.appThemeRadioGroup.check(SharedPreferencesUtils.getInteger(getApplicationContext(), "checkedButton", R.id.setFollowSystemTheme));
         b.dynamicColorsSwitch.setEnabled(DynamicColors.isDynamicColorAvailable());
         switchMaterial.setChecked(SharedPreferencesUtils.getBoolean(getApplicationContext(), "useDynamicColors"));
-        b.brightnessSwitch.setChecked(SharedPreferencesUtils.getBoolean(getApplicationContext(), "brightnessSwitch"));
-        b.brightnessSlider.setValue(SharedPreferencesUtils.getInteger(getApplicationContext(), "brightnessSlider", 1));
+        //b.brightnessSwitch.setChecked(SharedPreferencesUtils.getBoolean(getApplicationContext(), "brightnessSwitch"));
+        //b.brightnessSlider.setValue(SharedPreferencesUtils.getInteger(getApplicationContext(), "brightnessSlider", 1));
 
         b.appThemeRadioGroup.check(SharedPreferencesUtils.getInteger(getApplicationContext(), "checkedButton", R.id.setFollowSystemTheme));
         promoCode = SharedPreferencesUtils.getBoolean(getApplicationContext(), "promo", false);
 
-        if (b.brightnessSwitch.isChecked()) b.brightnessSlider.setVisibility(View.VISIBLE);
-        else b.brightnessSlider.setVisibility(View.GONE);
+        //if (b.brightnessSwitch.isChecked()) b.brightnessSlider.setVisibility(View.VISIBLE);
+        //else b.brightnessSlider.setVisibility(View.GONE);
 
         b.appThemeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
@@ -97,73 +97,12 @@ public class SettingsActivity extends AppCompatActivity {
             this.recreate();
         });
 
-        b.brightnessSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                b.brightnessSlider.setVisibility(View.VISIBLE);
-            } else {
-                b.brightnessSlider.setVisibility(View.GONE);
-                flashOffPromoCode();
-            }
-
-            SharedPreferencesUtils.saveBoolean(getApplicationContext(), "brightnessSwitch", isChecked);
-        });
-
-        b.brightnessSlider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
-            @Override
-            public void onStartTrackingTouch(@NonNull Slider slider) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(@NonNull Slider slider) {
-
-                CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-
-                    try {
-                        String[] cameraIds = cameraManager.getCameraIdList();
-                        for (String id : cameraIds) {
-                            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
-                            Integer lensFacing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                            if (lensFacing != null && lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
-                                cameraId = id;
-                                break;
-                            }
-                        }
-                    } catch (CameraAccessException e) {
-                        e.printStackTrace();
-                    } catch (IllegalStateException e) {
-                        slider.setValue(1);
-                    }
-
-                    try {
-                        cameraManager.setTorchMode(cameraId, true);
-                        cameraManager.turnOnTorchWithStrengthLevel(cameraId, (int) slider.getValue());
-                        cameraManager.setTorchMode(cameraId, false);
-                    } catch (CameraAccessException e) {
-                        throw new RuntimeException(e);
-                    } catch (IllegalStateException e) {
-                        slider.setValue(1);
-                    }
-                }
-                SharedPreferencesUtils.saveInteger(getApplicationContext(), "brightnessSlider", (int) slider.getValue());
-            }
-        });
-
         b.rafConsoleCard.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), RafConsoleActivity.class));
         });
 
         b.backMainCard.setOnClickListener(v -> {
             Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-            if (b.brightnessSwitch.isChecked()) {
-                intent1.putExtra("brightnessSlider",
-                        SharedPreferencesUtils.getInteger(
-                                getApplicationContext(), "brightnessSlider", 1));
-            } else if (!b.brightnessSwitch.isChecked()) {
-                intent1.putExtra("brightnessSlider", 1);
-            }
-
             startActivity(intent1);
         });
     }
@@ -199,7 +138,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 .show();
 
-        b.brightnessSwitch.setChecked(false);
+        //b.brightnessSwitch.setChecked(false);
     }
 
     public void flashOffPromoCode() {

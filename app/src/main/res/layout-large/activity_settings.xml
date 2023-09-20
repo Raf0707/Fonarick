@@ -96,68 +96,6 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/brightnessCard"
-                style="@style/Widget.Material3.CardView.Elevated"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                app:cardCornerRadius="16dp"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="32dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_gravity="center|center_vertical"
-                        android:padding="10dp"
-                        android:text="Управление яркостью фонарика"
-                        android:textSize="50sp"
-                        android:textStyle="bold" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/brightnessSwitch"
-                        style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:enabled="true"
-                        android:paddingHorizontal="8dp"
-                        android:text="Яркость фонарика"
-                        android:textSize="28sp" />
-
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/brightnessSlider"
-                        android:valueFrom="1"
-                        android:valueTo="5"
-                        app:tickVisible="true"
-                        android:stepSize="1"
-                        app:labelBehavior="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/brightnessWarning"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_gravity="center|center_vertical"
-                        android:padding="10dp"
-                        android:text="Вспышка камеры может вызвать низкотемпературные ожоги при длительном контакте с кожей. Не оставляйте Фонарик включенным в течении длительного времени"
-                        android:textSize="26sp"
-                        android:textStyle="bold" />
-
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/rafConsoleCard"
                 style="@style/Widget.Material3.CardView.Elevated"
                 android:layout_width="match_parent"
