@@ -15,6 +15,7 @@ import android.hardware.camera2.CameraManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -71,18 +72,21 @@ public class SettingsActivity extends AppCompatActivity {
         b.appThemeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.setFollowSystemTheme:
+                    clearCache(getApplicationContext());
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                     SharedPreferencesUtils.saveInteger(getApplicationContext(), "checkedButton", R.id.setFollowSystemTheme);
                     SharedPreferencesUtils.saveInteger(getApplicationContext(), "nightMode", 0);
                     this.recreate();
                     break;
                 case R.id.setLightTheme:
+                    clearCache(getApplicationContext());
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     SharedPreferencesUtils.saveInteger(getApplicationContext(), "checkedButton", R.id.setLightTheme);
                     SharedPreferencesUtils.saveInteger(getApplicationContext(), "nightMode", 1);
                     this.recreate();
                     break;
                 case R.id.setNightTheme:
+                    clearCache(getApplicationContext());
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     SharedPreferencesUtils.saveInteger(getApplicationContext(), "checkedButton", R.id.setNightTheme);
                     SharedPreferencesUtils.saveInteger(getApplicationContext(), "nightMode", 2);
@@ -93,6 +97,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         b.dynamicColorsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            clearCache(getApplicationContext());
             SharedPreferencesUtils.saveBoolean(getApplicationContext(), "useDynamicColors", isChecked);
             this.recreate();
         });
@@ -189,5 +194,19 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }, delay);
 
+    }
+
+    public void clearCache(Context context) {
+        try {
+            // Очистка внутреннего кеша приложения
+            context.getCacheDir().deleteOnExit();
+
+            // Очистка внешнего кеша приложения, если он доступен
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                context.getExternalCacheDir().deleteOnExit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

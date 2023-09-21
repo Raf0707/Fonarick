@@ -14,6 +14,7 @@ import android.hardware.camera2.CameraManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.snackbar.Snackbar;
@@ -57,7 +59,13 @@ public class MainActivity extends AppCompatActivity {
 
         App.instance.setNightMode();
 
+        if (SharedPreferencesUtils.getBoolean(this, "useDynamicColors"))
+            DynamicColors.applyToActivityIfAvailable(this);
+
+
+
         brightLight = SharedPreferencesUtils.getInteger(getApplicationContext(), "brightnessSlider");
+        binding.brightnessSlider.setValue(brightLight);
 
         if (savedInstanceState != null) App.instance.setNightMode();
 
@@ -120,9 +128,15 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     try {
-                        cameraManager.setTorchMode(cameraId, true);
-                        cameraManager.turnOnTorchWithStrengthLevel(cameraId, (int) slider.getValue());
-                        cameraManager.setTorchMode(cameraId, false);
+                        if (slider.getValue() != 1.0) {
+                            binding.torchbtn.setText("On");
+                            cameraManager.setTorchMode(cameraId, true);
+                            cameraManager.turnOnTorchWithStrengthLevel(cameraId, (int) slider.getValue());
+                        } else {
+                            String cameraId = cameraManager.getCameraIdList()[0];
+                            cameraManager.setTorchMode(cameraId, false);
+                            binding.torchbtn.setText("OFF");
+                        }
 
                     } catch (CameraAccessException e) {
                         throw new RuntimeException(e);
@@ -131,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 SharedPreferencesUtils.saveInteger(getApplicationContext(), "brightnessSlider", (int) slider.getValue());
+                clearCache(getApplicationContext());
             }
 
             @Override
@@ -155,9 +170,15 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     try {
-                        cameraManager.setTorchMode(cameraId, true);
-                        cameraManager.turnOnTorchWithStrengthLevel(cameraId, (int) slider.getValue());
-                        cameraManager.setTorchMode(cameraId, false);
+                        if (slider.getValue() != 1.0) {
+                            binding.torchbtn.setText("On");
+                            cameraManager.setTorchMode(cameraId, true);
+                            cameraManager.turnOnTorchWithStrengthLevel(cameraId, (int) slider.getValue());
+                        } else {
+                            String cameraId = cameraManager.getCameraIdList()[0];
+                            cameraManager.setTorchMode(cameraId, false);
+                            binding.torchbtn.setText("OFF");
+                        }
                     } catch (CameraAccessException e) {
                         throw new RuntimeException(e);
                     } catch (IllegalStateException e) {
@@ -165,7 +186,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 SharedPreferencesUtils.saveInteger(getApplicationContext(), "brightnessSlider", (int) slider.getValue());
+                clearCache(getApplicationContext());
             }
+
         });
 
     }
@@ -177,11 +200,13 @@ public class MainActivity extends AppCompatActivity {
             {
                 flashOnPromoCode();
                 binding.brightnessSlider.setVisibility(View.VISIBLE);
+                clearCache(getApplicationContext());
             }
             else
             {
                 flashOffPromoCode();
                 binding.brightnessSlider.setVisibility(View.GONE);
+                clearCache(getApplicationContext());
             }
         });
     }
@@ -327,5 +352,21 @@ public class MainActivity extends AppCompatActivity {
             }
         }, delay);
 
+
+
+    }
+
+    public void clearCache(Context context) {
+        try {
+            // Очистка внутреннего кеша приложения
+            context.getCacheDir().deleteOnExit();
+
+            // Очистка внешнего кеша приложения, если он доступен
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                context.getExternalCacheDir().deleteOnExit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
